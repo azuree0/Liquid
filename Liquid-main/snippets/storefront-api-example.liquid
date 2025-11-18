@@ -1,0 +1,55 @@
+{% comment %}
+  Example snippet showing how to use the Storefront API WebAssembly client
+  
+  Usage:
+  {% render 'storefront-api-example' %}
+  
+  Note: Replace 'YOUR_STOREFRONT_API_ACCESS_TOKEN' with your actual token
+{% endcomment %}
+
+<script src="{{ 'storefront-api.js' | asset_url }}" defer></script>
+<script src="{{ 'storefront-api-integration.js' | asset_url }}" defer></script>
+
+<script type="module">
+  // Initialize Storefront API Integration
+  // IMPORTANT: In production, store your access token securely
+  // Do not hardcode it in your theme files
+  
+  const STOREFRONT_API_TOKEN = 'YOUR_STOREFRONT_API_ACCESS_TOKEN';
+  
+  if (STOREFRONT_API_TOKEN && STOREFRONT_API_TOKEN !== 'YOUR_STOREFRONT_API_ACCESS_TOKEN') {
+    const apiIntegration = new StorefrontApiIntegration();
+    
+    // Initialize the client
+    await apiIntegration.init(STOREFRONT_API_TOKEN);
+    
+    // Example: Fetch current product (if on product page)
+    {% if product %}
+      const productHandle = '{{ product.handle }}';
+      const productData = await apiIntegration.fetchProduct(productHandle);
+      
+      if (productData) {
+        console.log('Product data from Storefront API:', productData);
+        
+        // You can use this data to enhance your product page
+        // For example, update prices, images, or variants dynamically
+      }
+    {% endif %}
+    
+    // Example: Fetch collection (if on collection page)
+    {% if collection %}
+      const collectionHandle = '{{ collection.handle }}';
+      const collectionData = await apiIntegration.fetchCollection(collectionHandle, 20);
+      
+      if (collectionData) {
+        console.log('Collection data from Storefront API:', collectionData);
+      }
+    {% endif %}
+    
+    // Make API available globally for other scripts
+    window.storefrontApi = apiIntegration;
+  } else {
+    console.warn('Storefront API access token not configured');
+  }
+</script>
+

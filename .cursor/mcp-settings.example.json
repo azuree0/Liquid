@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "storefront-api": {
+      "command": "node",
+      "args": ["./mcp-server/dist/index.js"],
+      "cwd": ".",
+      "env": {
+        "STOREFRONT_SHOP_DOMAIN": "your-shop.myshopify.com",
+        "STOREFRONT_ACCESS_TOKEN": "your-storefront-api-access-token",
+        "STOREFRONT_API_VERSION": "2024-01"
+      }
+    }
+  }
+}
+

@@ -1,0 +1,19 @@
+# Rust
+/target/
+Cargo.lock
+
+# WebAssembly output
+/pkg/
+/wasm/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+

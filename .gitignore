@@ -1,0 +1,26 @@
+# Node.js
+node_modules/
+dist/
+*.log
+.mcp-config.json
+.env
+
+# Rust
+/target/
+Cargo.lock
+
+# WebAssembly output
+/pkg/
+/wasm/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
