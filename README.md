@@ -55,8 +55,6 @@ Copy-Item .mcp-config.example.json .mcp-config.json
 
 ## Storefront API WebAssembly Module
 
-### 1. Install
-
 # Install wasm-pack
 cargo install wasm-pack
 
