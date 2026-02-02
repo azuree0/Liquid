@@ -1,6 +1,24 @@
 <img width="1522" height="1134" alt="Screenshot 2026-02-02 132947" src="https://github.com/user-attachments/assets/ac0f0af2-e95e-4591-b848-e30c89675822" />
 
-## MCP (Model Context Protocol) Setup for Cursor
+## Running Liquid
+
+1. **Install Shopify CLI:**
+```bash
+npm install -g @shopify/cli @shopify/theme
+```
+
+2. **Theme directory:**
+```bash
+cd Liquid-main
+```
+
+3. **Development server [2, IDE browser]:**
+```bash
+shopify theme dev
+```
+
+
+## MCP (Model Context Protocol, Cursor)
 
 1. **Install MCP Server Dependencies:**
 ```bash
@@ -9,41 +27,35 @@ npm install
 npm run build
 ```
 
-2. **Configure MCP Server:**
+2. **Copy .mcp-config.json:**
 ```bash
-cp mcp-server/.mcp-config.example.json .mcp-config.json
-# Edit .mcp-config.json with your Shopify credentials
+Copy-Item .mcp-config.example.json .mcp-config.json
 ```
 
-3. **Add to Cursor Settings:**
-   - Open Cursor Settings
-   - Navigate to "Features" > "Model Context Protocol"
-   - Add server:
-     - **Name**: Storefront API
-     - **Command**: `node`
-     - **Args**: `["./mcp-server/dist/index.js"]`
-     - **Working Directory**: Project root
+3. **Add MCP server in Cursor:**
+   1. Create the file `.cursor/mcp.json` in the project root (create the `.cursor` folder if needed).
+   2. Add a server entry like this (working directory = project root):
+      ```json
+      {
+        "mcpServers": {
+          "storefront-api": {
+            "command": "node",
+            "args": ["./mcp-server/dist/index.js"],
+            "cwd": "."
+          }
+        }
+      }
+      ```
 
-### Available MCP Tools
-
-- `build_wasm` - Build the WebAssembly module
-- `query_storefront_api` - Execute GraphQL queries
-- `get_product` - Get product data by handle
-- `get_collection` - Get collection data
-- `search_products` - Search products
-- `read_rust_code` - Read Rust source files
-- `read_js_wrapper` - Read JavaScript wrapper files
-- `check_build_status` - Check if WASM files are built
-
+4. **Verify MCP server is connected:**
+   - File → Preferences → Cursor Settings
+   - Navigate to **Tools & MCP**
+   - Verify the "storefront-api" server shows as connected/running
 
 
 ## Storefront API WebAssembly Module
 
-### 1. Install Prerequisites
-
-```bash
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+### 1. Install
 
 # Install wasm-pack
 cargo install wasm-pack
@@ -60,43 +72,35 @@ cd storefront-api-wasm
 build.bat
 ```
 
-**Linux/macOS:**
-```bash
-cd storefront-api-wasm
-chmod +x build.sh
-./build.sh
-```
-
-**Manual Build:**
-```bash
-cd storefront-api-wasm
-wasm-pack build --target web --out-dir ../Liquid-main/assets/wasm --release
-```
-
 This will create the WebAssembly files in `Liquid-main/assets/wasm/`:
 - `storefront_api_wasm.js` - JavaScript bindings
 - `storefront_api_wasm_bg.wasm` - Compiled WebAssembly binary
-- Other supporting files
+- Etc
 
 ### 3. Get Your Storefront API Token
 
-1. Log in to your Shopify admin
-2. Go to **Settings** > **Apps and sales channels**
-3. Click **Develop apps**
-4. Create a new app or select an existing one
-5. Click **Configure Storefront API scopes**
-6. Under **Storefront API**, select the scopes you need:
-   - `unauthenticated_read_product_listings` (for public product data)
-   - `unauthenticated_read_checkouts` (for cart operations)
-   - `unauthenticated_write_checkouts` (for cart operations)
-7. Click **Save**
-8. Go to **API credentials** tab
-9. Under **Storefront API access token**, click **Install app** if needed
-10. Copy your **Storefront API access token**
+**Option A — Headless channel (recommended)**
 
-⚠️ **Security Warning**: Never commit your access token to version control. Use environment variables or Shopify theme settings.
+1. Go to **Apps** (or **Settings** > **Apps and sales channels**)
+2. Click **App Store**, install **Headless**.
+3. Click **Create storefront** , manage
+4. Copy the **private access token**. Next, add it to your theme using the steps in **Add to Your Theme** below.
 
 ### 4. Add to Your Theme
+
+**Quick (development only)**  
+1. Open your theme’s `layout/theme.liquid`.  
+2. Adding the Storefront API script block and your token before the closing </body> tag.  
+3. Replace `'YOUR_STOREFRONT_API_ACCESS_TOKEN'` with the token you copied.  
+4. Save. Don’t commit this file with the real token.
+
+**Better for production (theme setting)**  
+1. In the theme editor: **Online Store** → **Themes** → **Customize** → **Theme settings** (or **App embeds** / a section that supports custom settings). Add a text setting (e.g. name: `Storefront API token`) and paste the token there. Save.  
+2. In your theme’s `config/settings_schema.json`, define the setting if it doesn’t exist (e.g. `{ "type": "text", "id": "storefront_api_token", "label": "Storefront API token" }`).  
+3. In `layout/theme.liquid`, add the script block below and set `accessToken` from the setting, e.g. `const accessToken = {{ settings.storefront_api_token | json }};`.  
+4. Save. The token stays in the editor, not in your repo.
+
+---
 
 In `layout/theme.liquid`, before the closing `</body>` tag:
 
@@ -107,8 +111,7 @@ In `layout/theme.liquid`, before the closing `</body>` tag:
 <script type="module">
   const apiIntegration = new StorefrontApiIntegration();
   
-  // Get token from theme settings or environment
-  // IMPORTANT: In production, use a secure method to store this token
+  // Quick: paste token here (dev only). Production: use theme setting (see above).
   const accessToken = 'YOUR_STOREFRONT_API_ACCESS_TOKEN';
   
   if (accessToken && accessToken !== 'YOUR_STOREFRONT_API_ACCESS_TOKEN') {
@@ -117,6 +120,8 @@ In `layout/theme.liquid`, before the closing `</body>` tag:
   }
 </script>
 ```
+
+For production, use: `const accessToken = {{ settings.storefront_api_token | json }};` and remove the placeholder check if desired.
 
 ### 5. Use It
 
@@ -139,30 +144,38 @@ const cart = await window.storefrontApi.createCart([
 ]);
 ```
 
+### Function
+
+Shopify Liquid theme setup, Storefront API WebAssembly module, MCP (Model Context Protocol) server for Cursor.
+
+### History
+
+2006, Liquid was created by Shopify in  as the templating language for themes; the Storefront API and headless/storefront use followed in later years. 
+2025, Liquid and the Storefront API are used for custom storefronts, theme app extensions, and programmatic access to catalog and cart from JS/WASM, alongside Hydrogen and other stacks.
+
 ### Structure
 
-```
+```text
 storefront-api-wasm/
 ├── src/
-│   └── lib.rs          # Main Rust code
-├── Cargo.toml          # Rust dependencies
-├── build.sh            # Build script (Linux/macOS)
-├── build.bat           # Build script (Windows)
+│   └── lib.rs                      # Rust Storefront API WASM logic                   (Backend)  (Source)
+├── Cargo.toml                      # Rust project and dependency configuration        (Backend)  (Config)
+├── build.sh                        # Build script for Linux/macOS                     (Backend)  (Config)
+├── build.bat                       # Build script for Windows                         (Backend)  (Config)
 └── .cargo/
-    └── config.toml     # Rust compiler configuration
+    └── config.toml                 # Rust compiler configuration                     (Backend)  (Config)
 
 Liquid-main/assets/
-├── storefront-api.js              # WebAssembly wrapper client
-├── storefront-api-integration.js  # High-level integration helper
-└── wasm/                           # Compiled WebAssembly files
+├── storefront-api.js               # WebAssembly wrapper client                      (Frontend) (Static / Script)
+├── storefront-api-integration.js   # High-level integration helper                   (Frontend) (Static / Script)
+└── wasm/                           # Compiled WebAssembly output                     (Frontend) (Static / WASM)
     ├── storefront_api_wasm.js
     ├── storefront_api_wasm_bg.wasm
     └── ...
 
 mcp-server/
 ├── src/
-│   └── index.ts        # MCP server implementation
-├── package.json        # Node.js dependencies
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # MCP server documentation
-```
+│   └── index.ts                    # MCP server implementation                       (Backend)  (Source)
+├── package.json                    # Node.js dependencies                            (Backend)  (Config)
+├── tsconfig.json                   # TypeScript configuration                        (Backend)  (Config)
+└── README.md                       # MCP server documentation                        (Config)   (Docs)
