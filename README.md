@@ -56,7 +56,9 @@ Copy-Item .mcp-config.example.json .mcp-config.json
 ## Storefront API WebAssembly Module
 
 # Install wasm-pack
+```cmd
 cargo install wasm-pack
+```
 
 # Add WebAssembly target
 rustup target add wasm32-unknown-unknown
