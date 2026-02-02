@@ -1,32 +1,4 @@
-![l](https://github.com/user-attachments/assets/232547e4-0a77-48b3-b443-903a105d44bf)
-
-### Project Structure
-
-```
-storefront-api-wasm/
-├── src/
-│   └── lib.rs          # Main Rust code
-├── Cargo.toml          # Rust dependencies
-├── build.sh            # Build script (Linux/macOS)
-├── build.bat           # Build script (Windows)
-└── .cargo/
-    └── config.toml     # Rust compiler configuration
-
-Liquid-main/assets/
-├── storefront-api.js              # WebAssembly wrapper client
-├── storefront-api-integration.js  # High-level integration helper
-└── wasm/                           # Compiled WebAssembly files
-    ├── storefront_api_wasm.js
-    ├── storefront_api_wasm_bg.wasm
-    └── ...
-
-mcp-server/
-├── src/
-│   └── index.ts        # MCP server implementation
-├── package.json        # Node.js dependencies
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # MCP server documentation
-```
+<img width="1522" height="1134" alt="Screenshot 2026-02-02 132947" src="https://github.com/user-attachments/assets/ac0f0af2-e95e-4591-b848-e30c89675822" />
 
 ## MCP (Model Context Protocol) Setup for Cursor
 
@@ -165,4 +137,32 @@ const cart = await window.storefrontApi.createCart([
     quantity: 1
   }
 ]);
+```
+
+### Structure
+
+```
+storefront-api-wasm/
+├── src/
+│   └── lib.rs          # Main Rust code
+├── Cargo.toml          # Rust dependencies
+├── build.sh            # Build script (Linux/macOS)
+├── build.bat           # Build script (Windows)
+└── .cargo/
+    └── config.toml     # Rust compiler configuration
+
+Liquid-main/assets/
+├── storefront-api.js              # WebAssembly wrapper client
+├── storefront-api-integration.js  # High-level integration helper
+└── wasm/                           # Compiled WebAssembly files
+    ├── storefront_api_wasm.js
+    ├── storefront_api_wasm_bg.wasm
+    └── ...
+
+mcp-server/
+├── src/
+│   └── index.ts        # MCP server implementation
+├── package.json        # Node.js dependencies
+├── tsconfig.json       # TypeScript configuration
+└── README.md           # MCP server documentation
 ```
