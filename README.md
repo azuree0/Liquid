@@ -57,7 +57,6 @@ Copy-Item .mcp-config.example.json .mcp-config.json
 
 # Install wasm-pack
 cargo install wasm-pack
-```
 
 # Add WebAssembly target
 rustup target add wasm32-unknown-unknown
