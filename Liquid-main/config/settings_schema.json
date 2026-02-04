@@ -1414,6 +1414,18 @@
     ]
   },
   {
+    "name": "Storefront API",
+    "settings": [
+      {
+        "type": "text",
+        "id": "storefront_api_token",
+        "label": "Storefront API token",
+        "info": "Development only. Do not commit real tokens to git.",
+        "default": ""
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.cart.name",
     "settings": [
       {
