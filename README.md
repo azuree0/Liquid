@@ -111,6 +111,7 @@ Shopify Liquid theme setup, Storefront API WebAssembly module, MCP (Model Contex
 
 ### Structure
 
+```text
 storefront-api-wasm/
 ├── src/
 │   └── lib.rs                      # Rust Storefront API WASM logic                   (Backend)  (Source)
