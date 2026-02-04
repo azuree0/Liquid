@@ -1,14 +1,30 @@
-const carosuels = document.querySelectorAll('.testimonial-slider');
-  
-carosuels.forEach(elem => {
+function initTestimonialSliders() {
+  const Flickity = window.Flickity;
+  if (!Flickity) return false;
 
-    let autoPlayInterval = Number(elem.dataset.autoplay);        
-        
-    new Flickity(elem,{
-        pageDots: false,
-        autoPlay: autoPlayInterval,
-        wrapAround: true,
-        cellAlign: 'left',
-        pauseAutoPlayOnHover: false
-      });
+  const carousels = document.querySelectorAll('.testimonial-slider');
+  carousels.forEach(function (elem) {
+    if (elem.flickity) return;
+    const autoPlayMs = Number(elem.dataset.autoplay) || 0;
+    new Flickity(elem, {
+      pageDots: false,
+      autoPlay: autoPlayMs > 0 ? autoPlayMs : false,
+      wrapAround: true,
+      cellAlign: 'left',
+      pauseAutoPlayOnHover: false
+    });
   });
+  return true;
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!initTestimonialSliders()) {
+      setTimeout(initTestimonialSliders, 100);
+    }
+  });
+} else {
+  if (!initTestimonialSliders()) {
+    setTimeout(initTestimonialSliders, 100);
+  }
+}

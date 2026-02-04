@@ -1,13 +1,11 @@
-.custom-testimonials slider-component:not(.flickity-enabled) {
+.custom-testimonials .testimonial-slider:not(.flickity-enabled) {
   display: flex;
   flex-direction: row;
   column-gap: var(--grid-desktop-horizontal-spacing);
   justify-content: center;
 }
 
-.custom-testimonials
-  slider-component:not(.flickity-enabled)
-  .testimonial-slide {
+.custom-testimonials .testimonial-slider:not(.flickity-enabled) .testimonial-slide {
   margin-right: 0px;
   min-width: 375px;
 }

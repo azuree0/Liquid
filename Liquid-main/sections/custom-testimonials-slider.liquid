@@ -67,16 +67,16 @@
               <div class="star-rating">
 
               {% assign full_stars = block.settings.star_rating | floor %}
+              {% assign rating_doubled = block.settings.star_rating | times: 2 %}
+              {% assign has_half_star = rating_doubled | modulo: 2 %}
 
               {% for i in (1..full_stars) %}
                 {% include 'icon-star-full' %}
               {% endfor %}
 
-              {% assign half_stars = block.settings.star_ratng | modulo: 1 %}
-
-              {% unless half_star == 0 %}
+              {% if has_half_star == 1 %}
                 {% include 'icon-star-half' %}
-              {% endunless %}  
+              {% endif %}
               </div>
             </div>
           </div>

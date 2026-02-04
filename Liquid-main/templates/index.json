@@ -330,6 +330,13 @@
         "padding_bottom": 36
       }
     },
+    "countdown_kT4AmX": {
+      "type": "countdown",
+      "settings": {
+        "text": "Spring Sale! Save up to 20%",
+        "final_date": "May 25, 2026 16:37:52 EST"
+      }
+    },
     "custom_testimonials_slider_Wq46eX": {
       "type": "custom-testimonials-slider",
       "blocks": {

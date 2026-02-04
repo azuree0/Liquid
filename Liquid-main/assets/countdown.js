@@ -1,40 +1,43 @@
 class CountDownTimer extends HTMLElement {
   constructor() {
     super();
+    this.interval = null;
+  }
 
-    console.log("CountdownTimer created");
-    // Grab required elements
+  connectedCallback() {
     this.countDownText = this.querySelector('.countdown-text');
     this.daysContainer = this.querySelector('.days');
     this.hoursContainer = this.querySelector('.hours');
     this.minutesContainer = this.querySelector('.minutes');
     this.secondsContainer = this.querySelector('.seconds');
+    this.timerContainer = this.querySelector('.countdown-timer');
 
-    console.log("Elements", {
-      countDownText: this.countDownText, 
-      daysContainer: this.daysContainer,
-      hoursContainer: this.hoursContainer,
-      minutesContainer: this.minutesContainer,
-      secondsContainer: this.secondsContainer,
-    });
+    if (!this.timerContainer) return;
 
-    // Set Date
-    this.timerContainer = this.querySelector(".countdown-timer");
-    this.endDateString = this.timerContainer.dataset.endDate;
-    this.endDate = new Date(this.endDateString).getTime();
+    const endDateString = (this.timerContainer.dataset.endDate || '').trim();
+    if (!endDateString) {
+      if (this.countDownText) this.countDownText.innerHTML = 'Set end date in theme settings';
+      return;
+    }
 
-    // Start timer using a bound function to preserve "this"
+    this.endDate = new Date(endDateString).getTime();
+    if (isNaN(this.endDate)) {
+      if (this.countDownText) this.countDownText.innerHTML = 'Invalid date — use format: May 25, 2026 16:37:52 EST';
+      return;
+    }
+
     this.interval = setInterval(this.handleTick.bind(this), 1000);
+    this.handleTick();
   }
 
   handleTick() {
-    // Logic and update elements
     const now = new Date().getTime();
     const timeleft = this.endDate - now;
 
     if (timeleft < 0) {
-      this.countDownText.innerHTML = 'This sale ended!';
-      clearInterval(this.interval);
+      if (this.countDownText) this.countDownText.innerHTML = 'This sale ended!';
+      if (this.interval) clearInterval(this.interval);
+      this.interval = null;
       return;
     }
 
@@ -47,15 +50,17 @@ class CountDownTimer extends HTMLElement {
     const minutes = Math.floor((timeleft % msInHour) / msInMinute);
     const seconds = Math.floor((timeleft % msInMinute) / 1000);
 
-    this.daysContainer.innerHTML = days + 'd ';
-    this.hoursContainer.innerHTML = hours + 'h ';
-    this.minutesContainer.innerHTML = minutes + 'm ';
-    this.secondsContainer.innerHTML = seconds + 's';
+    if (this.daysContainer) this.daysContainer.innerHTML = days + 'd ';
+    if (this.hoursContainer) this.hoursContainer.innerHTML = hours + 'h ';
+    if (this.minutesContainer) this.minutesContainer.innerHTML = minutes + 'm ';
+    if (this.secondsContainer) this.secondsContainer.innerHTML = seconds + 's ';
   }
 
   disconnectedCallback() {
-    clearInterval(this.interval);
+    if (this.interval) clearInterval(this.interval);
   }
 }
 
-customElements.define("countdown-timer", CountDownTimer);
+if (!customElements.get('countdown-timer')) {
+  customElements.define('countdown-timer', CountDownTimer);
+}
