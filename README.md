@@ -112,6 +112,20 @@ Shopify Liquid theme setup, Storefront API WebAssembly module, MCP (Model Contex
 ### Structure
 
 ```text
+Liquid-main/
+├── layout/                         # Theme layout templates                          (Frontend) (Liquid)
+│   ├── theme.liquid                # Main layout (Storefront API script injection)   (Frontend) (Liquid)
+│   ├── password.liquid             # Password page layout                            (Frontend) (Liquid)
+│   └── config/                     # Theme settings                                  (Config)
+│       ├── settings_data.json
+│       └── settings_schema.json
+
+mcp-server/                         # MCP server for Cursor (storefront-api)
+├── src/
+│   └── index.ts                    # MCP server implementation                       (Backend)  (Source)
+├── package.json                    # Node.js dependencies                            (Backend)  (Config)
+├── tsconfig.json                   # TypeScript configuration                        (Backend)  (Config)
+
 storefront-api-wasm/
 ├── src/
 │   └── lib.rs                      # Rust Storefront API WASM logic                   (Backend)  (Source)
@@ -120,18 +134,3 @@ storefront-api-wasm/
 ├── build.bat                       # Build script for Windows                         (Backend)  (Config)
 └── .cargo/
     └── config.toml                 # Rust compiler configuration                      (Backend)  (Config)
-
-Liquid-main/assets/
-├── storefront-api.js               # WebAssembly wrapper client                      (Frontend) (Static / Script)
-├── storefront-api-integration.js   # High-level integration helper                   (Frontend) (Static / Script)
-└── wasm/                           # Compiled WebAssembly output                     (Frontend) (Static / WASM)
-    ├── storefront_api_wasm.js
-    ├── storefront_api_wasm_bg.wasm
-    └── ...
-
-mcp-server/
-├── src/
-│   └── index.ts                    # MCP server implementation                       (Backend)  (Source)
-├── package.json                    # Node.js dependencies                            (Backend)  (Config)
-├── tsconfig.json                   # TypeScript configuration                        (Backend)  (Config)
-└── README.md                       # MCP server documentation                        (Config)   (Docs)
