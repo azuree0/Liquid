@@ -1,3 +1,4 @@
+{% # Section: footer %}
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {{ 'section-footer.css' | asset_url | stylesheet_tag }}
 {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
@@ -231,10 +232,8 @@
 
           {%- if shop.features.follow_on_shop? and section.settings.enable_follow_on_shop -%}
             <div class="footer__follow-on-shop">
-              {% comment %} TODO: enable theme-check once `login_button` is accepted as valid filter {% endcomment %}
-              {% # theme-check-disable %}
-              {{ shop | login_button: action: 'follow' }}
-              {% # theme-check-enable %}
+              {% comment %} Use a link instead of login_button to avoid framing shop.app (CSP frame-ancestors 'none') {% endcomment %}
+              <a href="https://shop.app/" target="_blank" rel="noopener noreferrer" class="button button--tertiary">{{ 'sections.footer.header__9.content' | t }}</a>
             </div>
           {%- endif -%}
 

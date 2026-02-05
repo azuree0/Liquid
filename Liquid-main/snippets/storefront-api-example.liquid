@@ -1,3 +1,4 @@
+{% # Snippet: storefront-api-example %}
 {% comment %}
   Example snippet showing how to use the Storefront API WebAssembly client
   
@@ -15,7 +16,7 @@
   // IMPORTANT: In production, store your access token securely
   // Do not hardcode it in your theme files
   
-  const STOREFRONT_API_TOKEN = 'YOUR_STOREFRONT_API_ACCESS_TOKEN';
+  const STOREFRONT_API_TOKEN = 'API_ACCESS_TOKEN'; // paste your Storefront API token from Shopify admin
   
   if (STOREFRONT_API_TOKEN && STOREFRONT_API_TOKEN !== 'YOUR_STOREFRONT_API_ACCESS_TOKEN') {
     const apiIntegration = new StorefrontApiIntegration();

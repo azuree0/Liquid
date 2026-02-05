@@ -1,3 +1,5 @@
+// Storefront API WebAssembly client: GraphQL query via fetch, exposed to JS via wasm_bindgen (StorefrontApi::new, query).
+
 use wasm_bindgen::prelude::*;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen_futures::JsFuture;

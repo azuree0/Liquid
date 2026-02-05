@@ -1,3 +1,4 @@
+/* Theme base: CSS custom properties (cards, buttons, inputs) and shared component styles. */
 :root {
   --alpha-button-background: 1;
   --alpha-button-border: 1;

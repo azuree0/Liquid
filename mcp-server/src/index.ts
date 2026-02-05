@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// MCP server for Shopify Storefront API: tools (build_wasm, query_storefront_api) and resources; stdio transport.
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -173,33 +174,40 @@ class StorefrontApiMcpServer {
 
     // Handle tool calls
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const { name, arguments: args } = request.params;
+      const { name, arguments: rawArgs } = request.params;
+      const args = (rawArgs ?? {}) as Record<string, unknown>;
 
       try {
         switch (name) {
           case 'build_wasm':
-            return await this.buildWasm(args?.target || 'web');
+            return await this.buildWasm(typeof args.target === 'string' ? args.target : 'web');
 
           case 'query_storefront_api':
             return await this.queryStorefrontApi(
-              args?.query,
-              args?.variables
+              typeof args.query === 'string' ? args.query : undefined,
+              args.variables
             );
 
           case 'get_product':
-            return await this.getProduct(args?.handle);
+            return await this.getProduct(typeof args.handle === 'string' ? args.handle : undefined);
 
           case 'get_collection':
-            return await this.getCollection(args?.handle, args?.first);
+            return await this.getCollection(
+              typeof args.handle === 'string' ? args.handle : undefined,
+              typeof args.first === 'number' ? args.first : undefined
+            );
 
           case 'search_products':
-            return await this.searchProducts(args?.query, args?.first);
+            return await this.searchProducts(
+              typeof args.query === 'string' ? args.query : undefined,
+              typeof args.first === 'number' ? args.first : undefined
+            );
 
           case 'read_rust_code':
-            return await this.readRustCode(args?.file || 'lib.rs');
+            return await this.readRustCode(typeof args.file === 'string' ? args.file : 'lib.rs');
 
           case 'read_js_wrapper':
-            return await this.readJsWrapper(args?.file);
+            return await this.readJsWrapper(typeof args.file === 'string' ? args.file : 'storefront-api.js');
 
           case 'check_build_status':
             return await this.checkBuildStatus();
