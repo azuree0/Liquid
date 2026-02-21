@@ -1,4 +1,4 @@
-<img width="1522" height="1134" alt="Screenshot 2026-02-02 132947" src="https://github.com/user-attachments/assets/ac0f0af2-e95e-4591-b848-e30c89675822" />
+<img width="4000" height="4000" alt="Client" src="https://github.com/user-attachments/assets/e3cd5f01-4269-4335-8bdd-eceec91f22b6" />
 
 ## Liquid
 
