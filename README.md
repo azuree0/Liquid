@@ -1,4 +1,4 @@
-<img width="337" height="468" alt="1" src="https://github.com/user-attachments/assets/b7091ea3-78bf-45af-89dd-176fe1772a9b" />
+<img width="207" height="286" alt="1" src="https://github.com/user-attachments/assets/82d5559c-c22b-4807-80e0-7d405a737c9d" />
 
 ## Liquid
 
